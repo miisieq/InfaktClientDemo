@@ -1,0 +1,9 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Faktura {{ invoice.number }}</h1>
+
+    <div class="text-left">
+        {{ dump(invoice) }}
+    </div>
+{% endblock %}

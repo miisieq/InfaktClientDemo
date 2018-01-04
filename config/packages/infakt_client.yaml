@@ -1,0 +1,2 @@
+infakt_client:
+    api_key: '%env(INFAKT_API_KEY)%'

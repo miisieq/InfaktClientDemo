@@ -1,0 +1,56 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Przegląd</h1>
+
+    <h2>Konta bankowe</h2>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>Nazwa banku</th>
+                <th>Numer konta</th>
+                <th>SWIFT</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for bankAccount in bankAccounts.collection %}
+            <tr>
+                <td class="text-center">
+                    {% if bankAccount.default %}
+                        <span class="label label-success">{{ 'Domyślne'|upper }}</span>
+                    {% else %}
+                        <span class="label label-default">{{ 'Dodatkowe'|upper }}</span>
+                    {% endif %}
+                </td>
+                <td>{{ bankAccount.bankName }}</td>
+                <td>{{ bankAccount.accountNumber }}</td>
+                <td>{{ bankAccount.swift ? : '–' }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    <h2>Stawki VAT</h2>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th class="text-center">Stawka</th>
+            <th class="text-center">Nazwa</th>
+            <th class="text-center">Symbol</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for vatRate in vatRates.collection %}
+            <tr>
+                <td>{{ vatRate.rate|number_format(2, ',') }} %</td>
+                <td>{{ vatRate.name }}</td>
+                <td>{{ vatRate.symbol }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+{% endblock %}

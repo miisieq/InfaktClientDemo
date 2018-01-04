@@ -1,0 +1,9 @@
+<ul class="pagination">
+    {% for i in 1..(total_count / query_params.limit)|round(0, 'ceil') %}
+       <li{% if query_params.page == i %} class="active"{% endif %}>
+            <a href="{{ path(app.request.attributes.get('_route'), query_params|merge({'page': i})) }}">
+                {{ i }}
+            </a>
+        </li>
+    {% endfor %}
+</ul>

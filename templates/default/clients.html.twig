@@ -1,0 +1,107 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Klienci</h1>
+
+    <table class="table table-hover">
+        <thead>
+        <tr>
+            <th>
+                Nazwa
+                {% include 'common/sort.html.twig' with {
+                    'column': 'company_name',
+                    'query_params': query_params
+                } %}
+            </th>
+            <th>
+                Ulica
+                {% include 'common/sort.html.twig' with {
+                    'column': 'street',
+                    'query_params': query_params
+                } %}
+            </th>
+            <th>
+                Miasto
+                {% include 'common/sort.html.twig' with {
+                    'column': 'city',
+                    'query_params': query_params
+                } %}
+            </th>
+            <th>
+                Kod pocztowy
+                {% include 'common/sort.html.twig' with {
+                    'column': 'postal_code',
+                    'query_params': query_params
+                } %}
+            </th>
+            <th>
+                Kraj
+                {% include 'common/sort.html.twig' with {
+                    'column': 'country',
+                    'query_params': query_params
+                } %}
+            </th>
+            <th>
+                NIP
+                {% include 'common/sort.html.twig' with {
+                    'column': 'nip',
+                    'query_params': query_params
+                } %}
+            </th>
+            <th>Numer telefonu</th>
+            <th>Strona WWW</th>
+            <th>E-mail</th>
+            <th>&nbsp;</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for client in clients.collection %}
+            <tr>
+                <td>
+                    <a href="{{ path('client_get', {'id': client.id}) }}">
+                        {{ client.companyName }}
+                    </a>
+                </td>
+                <td>
+                    {{ client.street }}
+                </td>
+                <td>
+                    {{ client.city }}
+                </td>
+                <td>
+                    {{ client.postalCode }}
+                </td>
+                <td>
+                    {{ client.country }}
+                </td>
+                <td nowrap="nowrap">
+                    {{ client.nip ? : '–' }}</td>
+                <td>
+                    {{ client.phoneNumber ? : '–' }}
+                </td>
+                <td>
+                    {{ client.website ? : '–' }}
+                </td>
+                <td>
+                    {{ client.email ? : '–' }}
+                </td>
+                <td>
+                    <a
+                            onclick="return confirm('Czy jesteś pewien, że chcesz usunąć klienta?')"
+                            href="{{ path('client_delete', {'id': client.id}) }}"
+                            title="Usuń"
+                    >
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'common/pagination.html.twig' with {
+        'query_params': query_params,
+        'total_count': clients.totalCount
+    } %}
+
+{% endblock %}

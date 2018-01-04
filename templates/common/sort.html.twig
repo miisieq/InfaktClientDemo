@@ -1,0 +1,21 @@
+{% set sort = query_params.sort is defined ? query_params.sort : {} %}
+{% set isSorted = sort.column is defined and sort.column == column %}
+{% set sortOrder = sort.order is defined and sort.order == 'asc' ? 'asc' : 'desc' %}
+{% set icon = 'sort' %}
+
+{% if isSorted and sortOrder == 'asc' %}
+    {% set icon = 'chevron-up' %}
+{% elseif isSorted %}
+    {% set icon = 'chevron-down' %}
+{% endif %}
+
+{% set newSort = {
+    sort: {
+        column: column,
+        order: sortOrder == 'asc' ? 'desc' : 'asc'
+    }
+} %}
+
+<a href="{{ path(app.request.attributes.get('_route'), query_params|merge(newSort)) }}">
+    <span class="glyphicon glyphicon-{{ icon }}" aria-hidden="true"></span>
+</a>

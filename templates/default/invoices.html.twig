@@ -1,0 +1,103 @@
+{% extends 'base.html.twig' %}
+
+{% block content %}
+    <h1>Faktury</h1>
+
+    <table class="table table-hover">
+        <thead>
+            <tr>
+                <th>Status</th>
+                <th>
+                    Numer faktury
+                </th>
+                <th>
+                    Data
+                    {% include 'common/sort.html.twig' with {
+                        'column': 'invoice_date',
+                        'query_params': query_params
+                    } %}
+                </th>
+                <th>
+                    Nazwa
+                    {% include 'common/sort.html.twig' with {
+                        'column': 'client_company_name',
+                        'query_params': query_params
+                    } %}
+                </th>
+                <th>Ulica</th>
+                <th>Miasto</th>
+                <th>Kod pocztowy</th>
+                <th>Kraj</th>
+                <th>NIP</th>
+                <th>
+                    Cena netto
+                    {% include 'common/sort.html.twig' with {
+                        'column': 'net_price',
+                        'query_params': query_params
+                    } %}
+                </th>
+                <th>
+                    Podatek
+                    {% include 'common/sort.html.twig' with {
+                        'column': 'tax_price',
+                        'query_params': query_params
+                    } %}
+                </th>
+                <th>
+                    Cena brutto
+                    {% include 'common/sort.html.twig' with {
+                        'column': 'gross_price',
+                        'query_params': query_params
+                    } %}
+                </th>
+                <th>&nbsp;</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for invoice in invoices.collection %}
+            <tr>
+                <td class="text-center">
+                    {% if constant('Infakt\\Model\\Invoice\\Status::PAID') == invoice.status %}
+                        <span class="label label-success">{{ constant('Infakt\\Model\\Invoice\\Status::PAID')|upper }}</span>
+                    {% elseif constant('Infakt\\Model\\Invoice\\Status::DRAFT') == invoice.status %}
+                        <span class="label label-default">{{ constant('Infakt\\Model\\Invoice\\Status::DRAFT')|upper }}</span>
+                    {% elseif constant('Infakt\\Model\\Invoice\\Status::SENT') == invoice.status %}
+                        <span class="label label-info">{{ constant('Infakt\\Model\\Invoice\\Status::SENT')|upper }}</span>
+                    {% elseif constant('Infakt\\Model\\Invoice\\Status::PRINTED') == invoice.status %}
+                        <span class="label label-primary">{{ constant('Infakt\\Model\\Invoice\\Status::PRINTED')|upper }}</span>
+                    {% endif %}
+                </td>
+                <td>
+                    <a href="{{ path('invoice_get', { id:invoice.id }) }}">
+                        {{ invoice.number }}
+                    </a>
+                </td>
+                <td nowrap="nowrap">{{ invoice.invoiceDate|date('Y-m-d') }}</td>
+                <td>{{ invoice.clientCompanyName }}</td>
+                <td>{{ invoice.clientStreet }}</td>
+                <td>{{ invoice.clientCity }}</td>
+                <td>{{ invoice.clientPostCode }}</td>
+                <td>{{ invoice.clientCountry }}</td>
+                <td>{{ invoice.clientTaxCode }}</td>
+                <td nowrap="nowrap" class="text-right">{{ (invoice.netPrice)|number_format(2, ',', ' ') }} zł</td>
+                <td nowrap="nowrap" class="text-right">{{ (invoice.taxPrice)|number_format(2, ',', ' ') }} zł</td>
+                <td nowrap="nowrap" class="text-right">{{ (invoice.grossPrice)|number_format(2, ',', ' ') }} zł</td>
+                <td>
+                    <a
+                            onclick="return confirm('Czy jesteś pewien, że chcesz usunąć fakturę?')"
+                            href="{{ path('invoice_delete', {'id': invoice.id}) }}"
+                            title="Usuń"
+                    >
+                        <i class="glyphicon glyphicon-trash"></i>
+                    </a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+    {% include 'common/pagination.html.twig' with {
+        'query_params': query_params,
+        'total_count': invoices.totalCount
+    } %}
+{% endblock %}
