@@ -5,12 +5,33 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 
-use Infakt\{Model, Collections};
+use Infakt\{Model, Collections, Repository\BankAccountRepository, Repository\VatRateRepository};
 
-class DemoController extends Controller
+class DemoController extends AbstractController
 {
+    /**
+     * @var BankAccountRepository
+     */
+    private $bankAccountRepository;
+    /**
+     * @var VatRateRepository
+     */
+    private $vatRateRepository;
+
+    /**
+     * DemoController constructor.
+     * @param BankAccountRepository $bankAccountRepository
+     * @param VatRateRepository $vatRateRepository
+     */
+    public function __construct(BankAccountRepository $bankAccountRepository, VatRateRepository $vatRateRepository)
+    {
+        $this->bankAccountRepository = $bankAccountRepository;
+        $this->vatRateRepository = $vatRateRepository;
+    }
+
     /**
      * @Route("/", name="dashboard")
      *
@@ -18,13 +39,13 @@ class DemoController extends Controller
      */
     public function dashboardAction()
     {
-        $bankAccounts = $this->get('infakt')->getRepository(Model\BankAccount::class)->matching(new Collections\Criteria([], [
+        $bankAccounts = $this->bankAccountRepository->matching(new Collections\Criteria([], [
             new Collections\SortClause('default', Collections\SortClause::ORDER_DESC)
         ]));
 
         return $this->render('default/dashboard.html.twig', [
             'bankAccounts' => $bankAccounts,
-            'vatRates' => $this->get('infakt')->getRepository(Model\VatRate::class)->getAll(),
+            'vatRates' => $this->vatRateRepository->getAll(),
         ]);
     }
 }

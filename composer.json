@@ -4,21 +4,17 @@
     "prefer-stable" : true,
     "license": "MIT",
     "require": {
-        "php": "^7.1.3",
+        "php": "^7.3",
+        "ext-ctype": "*",
         "ext-iconv": "*",
-        "sensio/framework-extra-bundle": "^5.1",
-        "symfony/console": "^4.0",
-        "symfony/flex": "^1.0",
-        "symfony/framework-bundle": "^4.0",
-        "symfony/lts": "^4@dev",
-        "symfony/yaml": "^4.0",
-        "miisieq/infakt-client-bundle": "dev-master@dev"
-    },
-    "require-dev": {
-        "symfony/dotenv": "^4.0",
-        "symfony/profiler-pack": "^1.0",
-        "symfony/thanks": "^1.0",
-        "symfony/web-server-bundle": "^4.0"
+        "miisieq/infakt-client-bundle": "dev-master@dev",
+        "sensio/framework-extra-bundle": "^5.5",
+        "symfony/console": "5.0.*",
+        "symfony/dotenv": "5.0.*",
+        "symfony/flex": "^1.3.1",
+        "symfony/framework-bundle": "5.0.*",
+        "symfony/twig-bundle": "5.0.*",
+        "symfony/yaml": "5.0.*"
     },
     "config": {
         "preferred-install": {
@@ -37,7 +33,10 @@
         }
     },
     "replace": {
+        "paragonie/random_compat": "2.*",
+        "symfony/polyfill-ctype": "*",
         "symfony/polyfill-iconv": "*",
+        "symfony/polyfill-php72": "*",
         "symfony/polyfill-php71": "*",
         "symfony/polyfill-php70": "*",
         "symfony/polyfill-php56": "*"
@@ -45,7 +44,7 @@
     "scripts": {
         "auto-scripts": {
             "cache:clear": "symfony-cmd",
-            "assets:install --symlink --relative %PUBLIC_DIR%": "symfony-cmd"
+            "assets:install %PUBLIC_DIR%": "symfony-cmd"
         },
         "post-install-cmd": [
             "@auto-scripts"
@@ -59,8 +58,12 @@
     },
     "extra": {
         "symfony": {
-            "id": "01C2EB8ZBE89EG3EBJKGJEB47J",
-            "allow-contrib": false
+            "allow-contrib": false,
+            "require": "5.0.*"
         }
+    },
+    "require-dev": {
+        "symfony/stopwatch": "5.0.*",
+        "symfony/web-profiler-bundle": "5.0.*"
     }
 }
